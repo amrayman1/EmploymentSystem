@@ -26,7 +26,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Employer")]
+        //[Authorize(Roles = "Employer")]
         public async Task<IActionResult> Create(CreateVacancyCommand command)
         {
             var vacancy = await _mediator.Send(command);
@@ -34,7 +34,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpGet("{id}/applications")]
-        [Authorize(Roles = "Employer")]
+        //[Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetApplicants(int id)
         {
             var applications = await _mediator.Send(new GetApplicantsForVacancyQuery { VacancyId = id });

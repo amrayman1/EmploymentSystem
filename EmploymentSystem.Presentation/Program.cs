@@ -30,6 +30,19 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
+//builder.Services.AddMediatR(typeof(LoginUserCommandHandler).Assembly);
+//builder.Services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
+//builder.Services.AddMediatR(typeof(ApplyForVacancyCommandHandler).Assembly);
+//builder.Services.AddMediatR(typeof(CreateVacancyCommandHandler).Assembly);
+
+
+// Register your handlers
+//builder.Services.AddTransient<IRequestHandler<RegisterUserCommand, User>, RegisterUserCommandHandler>();
+//builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<CreateVacancyCommand, Vacancy>, CreateVacancyCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>, ApplyForVacancyCommandHandler>();
+
+
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddControllers();
