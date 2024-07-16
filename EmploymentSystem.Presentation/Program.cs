@@ -4,7 +4,9 @@ using EmploymentSystem.Core.Interfaces;
 using EmploymentSystem.Infrastructure.Data;
 using EmploymentSystem.Infrastructure.Repositories;
 using EmploymentSystem.Presentation.Helper;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -28,7 +30,12 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
+//builder.Services.AddMediatR(typeof(LoginUserCommandHandler).Assembly);
 //builder.Services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
+//builder.Services.AddMediatR(typeof(ApplyForVacancyCommandHandler).Assembly);
+//builder.Services.AddMediatR(typeof(CreateVacancyCommandHandler).Assembly);
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 
 builder.Services.AddControllers();
 
