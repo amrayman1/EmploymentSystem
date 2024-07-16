@@ -30,12 +30,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
-//builder.Services.AddMediatR(typeof(LoginUserCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(ApplyForVacancyCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(CreateVacancyCommandHandler).Assembly);
-
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
+builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddControllers();
 
