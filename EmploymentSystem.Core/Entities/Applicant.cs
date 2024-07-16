@@ -9,6 +9,6 @@ namespace EmploymentSystem.Core.Entities
 {
     public class Applicant : User
     {
-        public List<ApplicationDetails> Applications { get; set; }
+        public List<ApplicationDetails> Applications { get; set; } = new List<ApplicationDetails>();
     }
 }

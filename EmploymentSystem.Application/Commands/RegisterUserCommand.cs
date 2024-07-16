@@ -4,42 +4,72 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EmploymentSystem.Application.Commands
 {
-    public class RegisterUserCommand : IRequest<User>
+    public class RegisterUserCommand : IRequest<IdentityResult>
     {
+        public string? Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
         public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
-        public string Role { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        public string Role { get; set; } // Optional Role
     }
 
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, User>
+    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, IdentityResult>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RegisterUserCommandHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher)
+        public RegisterUserCommandHandler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public async Task<User> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<IdentityResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
             var user = new User
             {
                 UserName = request.UserName,
-                Role = request.Role
+                Email = request.Email,
+                // Additional properties can be set here
             };
-            user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
 
-            await _userRepository.AddAsync(user);
-            return user;
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (result.Succeeded && !string.IsNullOrEmpty(request.Role))
+            {
+                var roleExists = await _roleManager.RoleExistsAsync(request.Role);
+                if (!roleExists)
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(request.Role));
+                }
+                await _userManager.AddToRoleAsync(user, request.Role);
+            }
+
+            return result;
         }
     }
-
 }

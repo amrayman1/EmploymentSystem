@@ -14,12 +14,12 @@ namespace EmploymentSystem.Infrastructure.Repositories
     {
         public ApplicationRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<ApplicationDetails>> GetApplicationsByApplicantIdAsync(int applicantId)
+        public async Task<IEnumerable<ApplicationDetails>> GetApplicationsByApplicantIdAsync(string applicantId)
         {
             return await _context.Applications.Where(a => a.ApplicantId == applicantId).ToListAsync();
         }
 
-        public async Task<bool> HasAppliedTodayAsync(int applicantId)
+        public async Task<bool> HasAppliedTodayAsync(string applicantId)
         {
             var today = DateTime.Today;
             return await _context.Applications.AnyAsync(a => a.ApplicantId == applicantId && a.ApplicationDate >= today);

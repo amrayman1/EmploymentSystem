@@ -8,6 +8,6 @@ namespace EmploymentSystem.Core.Entities
 {
     public class Employer : User
     {
-        public List<Vacancy> Vacancies { get; set; }
+        public List<Vacancy> Vacancies { get; set; } = new List<Vacancy>();
     }
 }

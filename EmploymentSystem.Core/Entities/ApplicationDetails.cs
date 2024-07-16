@@ -11,10 +11,13 @@ namespace EmploymentSystem.Core.Entities
     {
         public int Id { get; set; }
         public DateTime ApplicationDate { get; set; }
+
         [ForeignKey("VacancyId")]
         public Vacancy Vacancy { get; set; }
         public int VacancyId { get; set; }
-        public int ApplicantId { get; set; }
+
+        [ForeignKey("ApplicantId")]
         public Applicant Applicant { get; set; }
+        public string ApplicantId { get; set; }
     }
 }

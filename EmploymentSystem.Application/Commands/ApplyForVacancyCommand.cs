@@ -12,7 +12,7 @@ namespace EmploymentSystem.Application.Commands
     public class ApplyForVacancyCommand : IRequest<ApplicationDetails>
     {
         public int VacancyId { get; set; }
-        public int ApplicantId { get; set; }
+        public string ApplicantId { get; set; }
     }
 
     public class ApplyForVacancyCommandHandler : IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>

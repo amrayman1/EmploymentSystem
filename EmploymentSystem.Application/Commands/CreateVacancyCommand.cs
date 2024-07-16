@@ -15,7 +15,7 @@ namespace EmploymentSystem.Application.Commands
         public string Description { get; set; }
         public DateTime ExpiryDate { get; set; }
         public int MaxApplications { get; set; }
-        public int EmployerId { get; set; }
+        public string EmployerId { get; set; }
     }
 
     public class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, Vacancy>

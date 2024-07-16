@@ -14,9 +14,9 @@ namespace EmploymentSystem.Infrastructure.Repositories
     {
         public UserRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<User> GetByUserNameAsync(string userName)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return await _context.Users.SingleOrDefaultAsync(u => u.UserName == userName);
+            return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
     }
 

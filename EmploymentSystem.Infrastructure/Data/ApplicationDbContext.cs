@@ -1,5 +1,6 @@
 ﻿using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,40 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace EmploymentSystem.Infrastructure.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Applicant> Applicants { get; set; }
-        public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<ApplicationDetails> Applications { get; set; }
+        public DbSet<Vacancy> Vacancies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure relationships and constraints here
+            modelBuilder.Entity<Employer>()
+                .HasMany(e => e.Vacancies)
+                .WithOne(v => v.Employer)
+                .HasForeignKey(v => v.EmployerId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+
+            modelBuilder.Entity<Applicant>()
+                .HasMany(a => a.Applications)
+                .WithOne(ad => ad.Applicant)
+                .HasForeignKey(ad => ad.ApplicantId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+
+            modelBuilder.Entity<Vacancy>()
+                .HasMany(v => v.Applications)
+                .WithOne(ad => ad.Vacancy)
+                .HasForeignKey(ad => ad.VacancyId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+
+            modelBuilder.Entity<ApplicationDetails>()
+                .HasKey(ad => ad.Id);
         }
     }
 }

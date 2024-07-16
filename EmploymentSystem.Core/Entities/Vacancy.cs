@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,11 @@ namespace EmploymentSystem.Core.Entities
         public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
         public int MaxApplications { get; set; }
-        public int EmployerId { get; set; }
+
+        [ForeignKey("EmployerId")]
         public Employer Employer { get; set; }
-        public List<ApplicationDetails> Applications { get; set; }
+        public string EmployerId { get; set; }
+
+        public List<ApplicationDetails> Applications { get; set; } = new List<ApplicationDetails>();
     }
 }

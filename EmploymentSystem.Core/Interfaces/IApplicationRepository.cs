@@ -10,8 +10,8 @@ namespace EmploymentSystem.Core.Interfaces
 {
     public interface IApplicationRepository : IRepository<ApplicationDetails>
     {
-        Task<IEnumerable<ApplicationDetails>> GetApplicationsByApplicantIdAsync(int applicantId);
-        Task<bool> HasAppliedTodayAsync(int applicantId);
+        Task<IEnumerable<ApplicationDetails>> GetApplicationsByApplicantIdAsync(string applicantId);
+        Task<bool> HasAppliedTodayAsync(string applicantId);
         Task<int> GetApplicationCountByVacancyIdAsync(int vacancyId);
     }
 }

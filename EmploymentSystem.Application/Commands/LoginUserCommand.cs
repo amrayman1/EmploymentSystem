@@ -1,42 +1,51 @@
 ﻿using EmploymentSystem.Core.Entities;
-using EmploymentSystem.Core.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-
 namespace EmploymentSystem.Application.Commands
 {
     public class LoginUserCommand : IRequest<string>
     {
-        public string UserName { get; set; }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IPasswordHasher<User> _passwordHasher;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public LoginUserCommandHandler(IUserRepository userRepository, IPasswordHasher<User> passwordHasher, IConfiguration configuration)
+        public LoginUserCommandHandler(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
-            _userRepository = userRepository;
-            _passwordHasher = passwordHasher;
+            _userManager = userManager;
+            _signInManager = signInManager;
             _configuration = configuration;
         }
 
         public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByUserNameAsync(request.UserName);
-            if (user == null || _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            if (!result.Succeeded)
             {
                 return null;
             }
@@ -47,13 +56,14 @@ namespace EmploymentSystem.Application.Commands
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    // Add roles if necessary
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Issuer"]
+                Audience = _configuration["Jwt:Audience"]
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
