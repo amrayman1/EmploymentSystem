@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,12 @@ namespace EmploymentSystem.Core.Entities
 {
     public class ApplicationDetails
     {
-        public Guid ApplicationId { get; set; }
-        public Guid VacancyId { get; set; }
-        public Guid ApplicantId { get; set; }
+        public int Id { get; set; }
         public DateTime ApplicationDate { get; set; }
+        [ForeignKey("VacancyId")]
+        public Vacancy Vacancy { get; set; }
+        public int VacancyId { get; set; }
+        public int ApplicantId { get; set; }
+        public Applicant Applicant { get; set; }
     }
 }

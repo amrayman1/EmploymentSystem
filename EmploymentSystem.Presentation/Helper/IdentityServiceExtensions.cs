@@ -8,7 +8,7 @@ namespace EmploymentSystem.Presentation.Helper
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
             services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<EmploymentDbContext>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             return services;

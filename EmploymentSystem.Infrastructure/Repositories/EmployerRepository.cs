@@ -11,6 +11,6 @@ namespace EmploymentSystem.Infrastructure.Repositories
 {
     public class EmployerRepository : Repository<Employer>, IEmployerRepository
     {
-        public EmployerRepository(EmploymentDbContext context) : base(context) { }
+        public EmployerRepository(ApplicationDbContext context) : base(context) { }
     }
 }

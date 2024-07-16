@@ -8,9 +8,9 @@ namespace EmploymentSystem.Core.Entities
 {
     public class User
     {
-        public Guid UserId { get; set; }
+        public int Id { get; set; }
         public string UserName { get; set; }
         public string PasswordHash { get; set; }
-        public string Role { get; set; }
+        public string Role { get; set; } // "Employer" or "Applicant"
     }
 }

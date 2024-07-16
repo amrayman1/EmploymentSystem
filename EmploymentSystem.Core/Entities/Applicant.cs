@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EmploymentSystem.Core.Entities
 {
-    public class Applicant
+    public class Applicant : User
     {
-        public Guid ApplicantId { get; set; }
-        public Guid UserId { get; set; }
-        public string Resume { get; set; }
+        public List<ApplicationDetails> Applications { get; set; }
     }
 }

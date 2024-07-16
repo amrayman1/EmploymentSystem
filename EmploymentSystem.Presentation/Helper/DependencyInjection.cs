@@ -9,12 +9,11 @@ namespace EmploymentSystem.Presentation.Helper
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<EmploymentDbContext>(options =>
+            services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmployerRepository, EmployerRepository>();
-            services.AddScoped<IApplicantRepository, ApplicantRepository>();
             services.AddScoped<IVacancyRepository, VacancyRepository>();
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EmploymentSystem.Application.Commands;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,77 +14,34 @@ namespace EmploymentSystem.Presentation.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IMediator _mediator;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public AuthController(IMediator mediator)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register(RegisterUserCommand command)
         {
-            var user = new IdentityUser { UserName = model.UserName };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            var user = await _mediator.Send(command);
+            if (user == null)
             {
-                await _userManager.AddToRoleAsync(user, model.Role);
-                return Ok();
+                return BadRequest("User registration failed.");
             }
-
-            return BadRequest(result.Errors);
+            return Ok(user);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login(LoginUserCommand command)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
-            if (result.Succeeded)
+            var token = await _mediator.Send(command);
+            if (token == null)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
-                var token = GenerateJwtToken(user);
-                return Ok(new { Token = token });
+                return Unauthorized("Invalid credentials.");
             }
-
-            return Unauthorized();
-        }
-
-        private string GenerateJwtToken(IdentityUser user)
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: null,
-                audience: null,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { Token = token });
         }
     }
 
-    public class RegisterModel
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
-    }
-
-    public class LoginModel
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
 }

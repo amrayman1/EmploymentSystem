@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace EmploymentSystem.Core.Entities
 {
-    public class Employer
+    public class Employer : User
     {
-        public Guid EmployerId { get; set; }
-        public Guid UserId { get; set; }
-        public string CompanyName { get; set; }
+        public List<Vacancy> Vacancies { get; set; }
     }
 }

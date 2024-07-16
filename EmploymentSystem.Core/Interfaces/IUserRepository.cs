@@ -7,5 +7,8 @@ using System.Threading.Tasks;
 
 namespace EmploymentSystem.Core.Interfaces
 {
-    public interface IUserRepository : IRepository<User> { }
+    public interface IUserRepository : IRepository<User>
+    {
+        Task<User> GetByUserNameAsync(string userName);
+    }
 }

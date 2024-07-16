@@ -1,4 +1,6 @@
-﻿using EmploymentSystem.Application.UseCases;
+﻿using EmploymentSystem.Application.Commands;
+using EmploymentSystem.Application.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,18 +10,17 @@ namespace EmploymentSystem.Presentation.Controllers
     [ApiController]
     public class EmployersController : ControllerBase
     {
-        private readonly CreateVacancyHandler _createVacancyHandler;
+        private readonly IMediator _mediator;
 
-        public EmployersController(CreateVacancyHandler createVacancyHandler)
+        public EmployersController(IMediator mediator)
         {
-            _createVacancyHandler = createVacancyHandler;
+            _mediator = mediator;
         }
-
         [HttpPost("vacancies")]
         public async Task<IActionResult> CreateVacancy([FromBody] CreateVacancyCommand command)
         {
-            await _createVacancyHandler.Handle(command);
-            return Ok();
+            var vacancy = await _mediator.Send(command);
+            return Ok(vacancy);
         }
     }
 }

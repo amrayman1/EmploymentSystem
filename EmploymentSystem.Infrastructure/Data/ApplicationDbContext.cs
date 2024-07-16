@@ -10,14 +10,21 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace EmploymentSystem.Infrastructure.Data
 {
-    public class EmploymentDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public EmploymentDbContext(DbContextOptions<EmploymentDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Employer> Employers { get; set; }
         public DbSet<Applicant> Applicants { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
         public DbSet<ApplicationDetails> Applications { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Configure relationships and constraints here
+        }
     }
 }
