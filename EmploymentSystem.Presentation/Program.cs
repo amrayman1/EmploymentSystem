@@ -80,8 +80,8 @@ builder.Services.AddSwaggerGen(options =>
 
 
 // Register your handlers
-//builder.Services.AddTransient<IRequestHandler<RegisterUserCommand, User>, RegisterUserCommandHandler>();
-//builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<RegisterUserCommand, IdentityResult>, RegisterUserCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<CreateVacancyCommand, Vacancy>, CreateVacancyCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>, ApplyForVacancyCommandHandler>();
 

@@ -34,7 +34,8 @@ namespace EmploymentSystem.Application.Commands
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
 
-        public string Role { get; set; } // Optional Role
+        [Required]
+        public string Role { get; set; } // Role selection
     }
 
     public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, IdentityResult>
