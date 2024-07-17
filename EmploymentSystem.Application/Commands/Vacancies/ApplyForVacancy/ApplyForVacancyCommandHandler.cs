@@ -2,9 +2,11 @@
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,15 +16,29 @@ namespace EmploymentSystem.Application.Features.Vacancies.ApplyForVacancy
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IVacancyRepository _vacancyRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ApplyForVacancyCommandHandler(IApplicationRepository applicationRepository, IVacancyRepository vacancyRepository)
+
+        public ApplyForVacancyCommandHandler(IApplicationRepository applicationRepository, IUserRepository userRepository, IVacancyRepository vacancyRepository, IHttpContextAccessor httpContextAccessor)
         {
             _applicationRepository = applicationRepository;
             _vacancyRepository = vacancyRepository;
+            _userRepository = userRepository;
+            _httpContextAccessor = httpContextAccessor;
+
         }
 
         public async Task<ApplicationDetails> Handle(ApplyForVacancyCommand request, CancellationToken cancellationToken)
         {
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                throw new Exception("User is not authenticated.");
+            }
+
+            var user = await _userRepository.GetByEmailAsync(userIdClaim);
+
             var vacancy = await _vacancyRepository.GetByIdAsync(request.VacancyId);
             if (vacancy == null || !vacancy.IsActive || vacancy.ExpiryDate < DateTime.Now)
             {
@@ -35,7 +51,7 @@ namespace EmploymentSystem.Application.Features.Vacancies.ApplyForVacancy
                 throw new Exception("Maximum number of applications reached for this vacancy.");
             }
 
-            var hasAppliedToday = await _applicationRepository.HasAppliedTodayAsync(request.ApplicantId);
+            var hasAppliedToday = await _applicationRepository.HasAppliedTodayAsync(user.Id);
             if (hasAppliedToday)
             {
                 throw new Exception("You can only apply for one vacancy per day.");
@@ -44,7 +60,7 @@ namespace EmploymentSystem.Application.Features.Vacancies.ApplyForVacancy
             var application = new ApplicationDetails
             {
                 VacancyId = request.VacancyId,
-                ApplicantId = request.ApplicantId,
+                ApplicantId = user.Id,
                 ApplicationDate = DateTime.Now
             };
 

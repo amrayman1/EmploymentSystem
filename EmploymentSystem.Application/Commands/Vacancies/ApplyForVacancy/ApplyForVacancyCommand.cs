@@ -12,6 +12,6 @@ namespace EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy
     public class ApplyForVacancyCommand : IRequest<ApplicationDetails>
     {
         public int VacancyId { get; set; }
-        public string ApplicantId { get; set; }
+        //public string ApplicantId { get; set; }
     }
 }

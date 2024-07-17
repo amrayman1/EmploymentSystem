@@ -13,7 +13,7 @@ namespace EmploymentSystem.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "Employer")]
     public class EmployersController : ControllerBase
     {
         private readonly IMediator _mediator;

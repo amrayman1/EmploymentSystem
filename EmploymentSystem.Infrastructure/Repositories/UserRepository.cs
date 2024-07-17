@@ -18,6 +18,11 @@ namespace EmploymentSystem.Infrastructure.Repositories
         {
             return await _context.Users.SingleOrDefaultAsync(u => u.Email == email);
         }
+
+        public async Task<User> GetUserIdAsync(string id)
+        {
+            return await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+        }
     }
 
 }

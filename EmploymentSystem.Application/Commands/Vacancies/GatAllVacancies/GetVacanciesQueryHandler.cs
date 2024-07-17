@@ -15,19 +15,27 @@ namespace EmploymentSystem.Application.Features.Vacancies.GatAllVacancies
     {
         private readonly IVacancyRepository _vacancyRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
 
-        public GetVacanciesQueryHandler(IVacancyRepository vacancyRepository, IHttpContextAccessor httpContextAccessor)
+        public GetVacanciesQueryHandler(IVacancyRepository vacancyRepository, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor)
         {
             _vacancyRepository = vacancyRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
         }
 
         public async Task<IEnumerable<Vacancy>?> Handle(GetVacanciesQuery request, CancellationToken cancellationToken)
         {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null)
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userIdClaim))
             {
-                return await _vacancyRepository.GetVacanciesAsync(userId);
+                throw new Exception("User is not authenticated.");
+            }
+
+            var user = await _userRepository.GetByEmailAsync(userIdClaim);
+            if (user != null)
+            {
+                return await _vacancyRepository.GetVacanciesAsync(user.Id);
             }
             return null;
         }
