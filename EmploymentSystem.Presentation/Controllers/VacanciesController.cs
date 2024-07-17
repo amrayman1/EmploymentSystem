@@ -1,9 +1,10 @@
-﻿using EmploymentSystem.Application.Commands;
-using EmploymentSystem.Application.Queries;
+﻿using EmploymentSystem.Application.Commands.Vacancies.CreateVacancy;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies;
+using EmploymentSystem.Application.Commands.Vacancies.GetAllApplicants;
 
 namespace EmploymentSystem.Presentation.Controllers
 {
@@ -26,7 +27,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> Create(CreateVacancyCommand command)
         {
             var vacancy = await _mediator.Send(command);
@@ -34,7 +35,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpGet("{id}/applications")]
-        //[Authorize(Roles = "Employer")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetApplicants(int id)
         {
             var applications = await _mediator.Send(new GetApplicantsForVacancyQuery { VacancyId = id });

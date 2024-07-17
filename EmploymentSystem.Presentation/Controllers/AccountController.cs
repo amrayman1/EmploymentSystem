@@ -1,4 +1,5 @@
-﻿using EmploymentSystem.Application.Commands;
+﻿using EmploymentSystem.Application.Commands.Accounts.Login;
+using EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +22,24 @@ namespace EmploymentSystem.Presentation.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserCommand command)
+        [HttpPost("RegisterAsEmployer")]
+        public async Task<IActionResult> RegisterAsEmployer(RegisterAsEmployerCommand command)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _mediator.Send(command);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            return Ok("User registered successfully");
+        }
+
+        [HttpPost("RegisterAsApplicant")]
+        public async Task<IActionResult> RegisterAsApplicant(RegisterAsEmployerCommand command)
         {
             if (!ModelState.IsValid)
             {

@@ -9,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmploymentSystem.Application.Commands
+namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer
 {
-    public class RegisterUserCommand : IRequest<IdentityResult>
+    public class RegisterAsEmployerCommand : IRequest<IdentityResult>
     {
-        public string? Id { get; set; }
+        //public string? Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -29,45 +29,39 @@ namespace EmploymentSystem.Application.Commands
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Passwords do not match.")]
-        public string ConfirmPassword { get; set; }
-
-        [Required]
-        public string Role { get; set; } // Role selection
+        //[Required]
+        //public string Role { get; set; } // Role selection
     }
 
-    public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, IdentityResult>
+    public class RegisterAsEmployerCommandHandler : IRequestHandler<RegisterAsEmployerCommand, IdentityResult>
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RegisterUserCommandHandler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public RegisterAsEmployerCommandHandler(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        public async Task<IdentityResult> Handle(RegisterAsEmployerCommand request, CancellationToken cancellationToken)
         {
             var user = new User
             {
                 UserName = request.UserName,
                 Email = request.Email,
-                // Additional properties can be set here
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
-            if (result.Succeeded && !string.IsNullOrEmpty(request.Role))
+            if (result.Succeeded)
             {
-                var roleExists = await _roleManager.RoleExistsAsync(request.Role);
+                var roleExists = await _roleManager.RoleExistsAsync("Employer");
                 if (!roleExists)
                 {
-                    await _roleManager.CreateAsync(new IdentityRole(request.Role));
+                    await _roleManager.CreateAsync(new IdentityRole("Employer"));
                 }
-                await _userManager.AddToRoleAsync(user, request.Role);
+                await _userManager.AddToRoleAsync(user, "Employer");
             }
 
             return result;

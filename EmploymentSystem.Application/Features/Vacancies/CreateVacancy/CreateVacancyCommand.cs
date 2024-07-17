@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmploymentSystem.Application.Commands
+namespace EmploymentSystem.Application.Commands.Vacancies.CreateVacancy
 {
     public class CreateVacancyCommand : IRequest<Vacancy>
     {
@@ -15,6 +15,7 @@ namespace EmploymentSystem.Application.Commands
         public string Description { get; set; }
         public DateTime ExpiryDate { get; set; }
         public int MaxApplications { get; set; }
+        public bool IsActive { get; set; }
         public string EmployerId { get; set; }
     }
 
@@ -35,8 +36,8 @@ namespace EmploymentSystem.Application.Commands
                 Description = request.Description,
                 ExpiryDate = request.ExpiryDate,
                 MaxApplications = request.MaxApplications,
+                IsActive = request.IsActive,
                 EmployerId = request.EmployerId,
-                IsActive = true,
                 Applications = new List<ApplicationDetails>()
             };
 

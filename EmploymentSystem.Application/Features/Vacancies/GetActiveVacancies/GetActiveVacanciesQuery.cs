@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmploymentSystem.Application.Queries
+namespace EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies
 {
     public class GetActiveVacanciesQuery : IRequest<IEnumerable<Vacancy>>
     {

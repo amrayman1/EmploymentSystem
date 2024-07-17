@@ -1,5 +1,4 @@
-﻿using EmploymentSystem.Application.Commands;
-using EmploymentSystem.Application.Queries;
+﻿using EmploymentSystem.Application.Commands.Vacancies.CreateVacancy;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

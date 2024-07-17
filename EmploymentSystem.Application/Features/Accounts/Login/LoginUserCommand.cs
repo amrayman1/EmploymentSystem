@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-namespace EmploymentSystem.Application.Commands
+namespace EmploymentSystem.Application.Commands.Accounts.Login
 {
     public class LoginUserCommand : IRequest<string>
     {
@@ -36,7 +36,7 @@ namespace EmploymentSystem.Application.Commands
             _configuration = configuration;
         }
 
-        public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<string?> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)

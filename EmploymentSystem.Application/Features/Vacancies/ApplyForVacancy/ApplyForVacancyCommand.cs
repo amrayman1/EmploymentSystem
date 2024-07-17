@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmploymentSystem.Application.Commands
+namespace EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy
 {
     public class ApplyForVacancyCommand : IRequest<ApplicationDetails>
     {

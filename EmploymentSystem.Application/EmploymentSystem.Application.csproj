@@ -11,6 +11,11 @@
     <ProjectReference Include="..\EmploymentSystem.Core\EmploymentSystem.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Vacancies\PostOrDeactiveVacancy\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

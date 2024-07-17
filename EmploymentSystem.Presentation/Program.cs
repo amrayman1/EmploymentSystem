@@ -1,9 +1,14 @@
-using EmploymentSystem.Application.Commands;
+using EmploymentSystem.Application.Commands.Accounts.Login;
+using EmploymentSystem.Application.Commands.Accounts.RegisterAsApplicant;
+using EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer;
+using EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy;
+using EmploymentSystem.Application.Commands.Vacancies.CreateVacancy;
+using EmploymentSystem.Application.Commands.Vacancies.GetAllApplicants;
+using EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies;
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using EmploymentSystem.Infrastructure.Data;
 using EmploymentSystem.Infrastructure.Repositories;
-using EmploymentSystem.Presentation.Helper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -80,11 +85,13 @@ builder.Services.AddSwaggerGen(options =>
 
 
 // Register your handlers
-builder.Services.AddTransient<IRequestHandler<RegisterUserCommand, IdentityResult>, RegisterUserCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<RegisterAsEmployerCommand, IdentityResult>, RegisterAsEmployerCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<RegisterAsApplicantCommand, IdentityResult>, RegisterAsApplicantCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<CreateVacancyCommand, Vacancy>, CreateVacancyCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>, ApplyForVacancyCommandHandler>();
-
+builder.Services.AddTransient<IRequestHandler<GetActiveVacanciesQuery, IEnumerable<Vacancy>>, GetActiveVacanciesQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetApplicantsForVacancyQuery, IEnumerable<ApplicationDetails>>, GetApplicantsForVacancyQueryHandler>();
 
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 

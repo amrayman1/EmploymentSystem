@@ -1,4 +1,4 @@
-﻿using EmploymentSystem.Application.Commands;
+﻿using EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +18,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Applicant")]
+        [Authorize(Roles = "Applicant")]
         public async Task<IActionResult> Apply(ApplyForVacancyCommand command)
         {
             var application = await _mediator.Send(command);
