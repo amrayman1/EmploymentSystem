@@ -20,34 +20,5 @@ namespace EmploymentSystem.Application.Features.Vacancies.EditVacancy
         public string EmployerId { get; set; }
     }
 
-    public class EditVacancyCommandHandler : IRequestHandler<EditVacancyCommand, Vacancy>
-    {
-        private readonly IVacancyRepository _vacancyRepository;
-
-        public EditVacancyCommandHandler(IVacancyRepository vacancyRepository)
-        {
-            _vacancyRepository = vacancyRepository;
-        }
-
-        public async Task<Vacancy> Handle(EditVacancyCommand request, CancellationToken cancellationToken)
-        {
-            var vacancy = await _vacancyRepository.GetByIdAsync(request.Id);
-
-            if (vacancy == null)
-            {
-                // Handle not found case (throw exception or return null)
-                throw new Exception("Vacancy not found");
-            }
-
-            vacancy.Title = request.Title;
-            vacancy.Description = request.Description;
-            vacancy.ExpiryDate = request.ExpiryDate;
-            vacancy.MaxApplications = request.MaxApplications;
-            vacancy.IsActive = request.IsActive;
-
-            await _vacancyRepository.UpdateAsync(vacancy);
-
-            return vacancy;
-        }
-    }
+    
 }

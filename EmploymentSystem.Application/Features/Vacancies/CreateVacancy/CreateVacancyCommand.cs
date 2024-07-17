@@ -19,31 +19,4 @@ namespace EmploymentSystem.Application.Commands.Vacancies.CreateVacancy
         public string EmployerId { get; set; }
     }
 
-    public class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, Vacancy>
-    {
-        private readonly IVacancyRepository _vacancyRepository;
-
-        public CreateVacancyCommandHandler(IVacancyRepository vacancyRepository)
-        {
-            _vacancyRepository = vacancyRepository;
-        }
-
-        public async Task<Vacancy> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
-        {
-            var vacancy = new Vacancy
-            {
-                Title = request.Title,
-                Description = request.Description,
-                ExpiryDate = request.ExpiryDate,
-                MaxApplications = request.MaxApplications,
-                IsActive = request.IsActive,
-                EmployerId = request.EmployerId,
-                Applications = new List<ApplicationDetails>()
-            };
-
-            await _vacancyRepository.AddAsync(vacancy);
-            return vacancy;
-        }
-    }
-
 }

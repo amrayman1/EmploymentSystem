@@ -14,18 +14,5 @@ namespace EmploymentSystem.Application.Features.Vacancies.SearchForVacancy
         public string Title { get; set; }
     }
 
-    public class SearchVacanciesQueryHandler : IRequestHandler<SearchVacanciesQuery, IEnumerable<Vacancy>>
-    {
-        private readonly IVacancyRepository _vacancyRepository;
-
-        public SearchVacanciesQueryHandler(IVacancyRepository vacancyRepository)
-        {
-            _vacancyRepository = vacancyRepository;
-        }
-
-        public async Task<IEnumerable<Vacancy>> Handle(SearchVacanciesQuery request, CancellationToken cancellationToken)
-        {
-            return await _vacancyRepository.SearchVacanciesAsync(request.Title);
-        }
-    }
+    
 }
