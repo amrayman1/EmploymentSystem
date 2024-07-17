@@ -2,9 +2,11 @@
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,10 +15,12 @@ namespace EmploymentSystem.Application.Features.Vacancies.CreateVacancy
     public class CreateVacancyCommandHandler : IRequestHandler<CreateVacancyCommand, Vacancy>
     {
         private readonly IVacancyRepository _vacancyRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateVacancyCommandHandler(IVacancyRepository vacancyRepository)
+        public CreateVacancyCommandHandler(IVacancyRepository vacancyRepository, IHttpContextAccessor httpContextAccessor)
         {
-            _vacancyRepository = vacancyRepository;
+            _vacancyRepository = vacancyRepository; 
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Vacancy> Handle(CreateVacancyCommand request, CancellationToken cancellationToken)
@@ -28,7 +32,7 @@ namespace EmploymentSystem.Application.Features.Vacancies.CreateVacancy
                 ExpiryDate = request.ExpiryDate,
                 MaxApplications = request.MaxApplications,
                 IsActive = request.IsActive,
-                EmployerId = request.EmployerId,
+                EmployerId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Applications = new List<ApplicationDetails>()
             };
 

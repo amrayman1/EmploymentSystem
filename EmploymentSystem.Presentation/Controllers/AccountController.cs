@@ -1,6 +1,9 @@
 ﻿using EmploymentSystem.Application.Commands.Accounts.Login;
+using EmploymentSystem.Application.Commands.Accounts.RegisterAsApplicant;
 using EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer;
+using EmploymentSystem.Core.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +19,13 @@ namespace EmploymentSystem.Presentation.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly SignInManager<User> _signInManager;
 
-        public AccountController(IMediator mediator)
+        public AccountController(IMediator mediator, SignInManager<User> signInManager)
         {
             _mediator = mediator;
+            _signInManager = signInManager;
+
         }
 
         [HttpPost("RegisterAsEmployer")]
@@ -39,7 +45,7 @@ namespace EmploymentSystem.Presentation.Controllers
         }
 
         [HttpPost("RegisterAsApplicant")]
-        public async Task<IActionResult> RegisterAsApplicant(RegisterAsEmployerCommand command)
+        public async Task<IActionResult> RegisterAsApplicant(RegisterAsApplicantCommand command)
         {
             if (!ModelState.IsValid)
             {
@@ -68,6 +74,14 @@ namespace EmploymentSystem.Presentation.Controllers
                 return Unauthorized("Invalid credentials.");
             }
             return Ok(new { Token = token });
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok("User logged out successfully");
         }
     }
 

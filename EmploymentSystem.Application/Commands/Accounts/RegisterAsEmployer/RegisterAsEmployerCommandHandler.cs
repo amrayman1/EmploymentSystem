@@ -1,38 +1,15 @@
-﻿using EmploymentSystem.Core.Entities;
-using EmploymentSystem.Core.Interfaces;
+﻿using EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer;
+using EmploymentSystem.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer
+namespace EmploymentSystem.Application.Features.Accounts.RegisterAsEmployer
 {
-    public class RegisterAsEmployerCommand : IRequest<IdentityResult>
-    {
-        //public string? Id { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        public string UserName { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
-        //[Required]
-        //public string Role { get; set; } // Role selection
-    }
-
     public class RegisterAsEmployerCommandHandler : IRequestHandler<RegisterAsEmployerCommand, IdentityResult>
     {
         private readonly UserManager<User> _userManager;
@@ -48,8 +25,9 @@ namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer
         {
             var user = new User
             {
-                UserName = request.UserName,
-                Email = request.Email,
+                Name = request.Name,
+                UserName = request.Email,
+                Email = request.Email
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);

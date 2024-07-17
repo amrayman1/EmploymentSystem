@@ -1,28 +1,19 @@
-﻿using EmploymentSystem.Core.Entities;
+﻿using EmploymentSystem.Application.Commands.Accounts.Login;
+using EmploymentSystem.Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-namespace EmploymentSystem.Application.Commands.Accounts.Login
+
+namespace EmploymentSystem.Application.Features.Accounts.Login
 {
-    public class LoginUserCommand : IRequest<string>
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    }
-
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
     {
         private readonly UserManager<User> _userManager;
@@ -58,7 +49,6 @@ namespace EmploymentSystem.Application.Commands.Accounts.Login
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Email, user.Email),
-                    // Add roles if necessary
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),

@@ -5,10 +5,17 @@ using EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy;
 using EmploymentSystem.Application.Commands.Vacancies.CreateVacancy;
 using EmploymentSystem.Application.Commands.Vacancies.GetAllApplicants;
 using EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies;
+using EmploymentSystem.Application.Features.Accounts.Login;
+using EmploymentSystem.Application.Features.Accounts.RegisterAsApplicant;
+using EmploymentSystem.Application.Features.Accounts.RegisterAsEmployer;
 using EmploymentSystem.Application.Features.Vacancies.ApplyForVacancy;
 using EmploymentSystem.Application.Features.Vacancies.CreateVacancy;
+using EmploymentSystem.Application.Features.Vacancies.DeleteVacancy;
+using EmploymentSystem.Application.Features.Vacancies.EditVacancy;
+using EmploymentSystem.Application.Features.Vacancies.GatAllVacancies;
 using EmploymentSystem.Application.Features.Vacancies.GetActiveVacancies;
 using EmploymentSystem.Application.Features.Vacancies.GetApplicants;
+using EmploymentSystem.Application.Features.Vacancies.SearchForVacancy;
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using EmploymentSystem.Infrastructure.Data;
@@ -84,24 +91,23 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
-//builder.Services.AddMediatR(typeof(LoginUserCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(RegisterUserCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(ApplyForVacancyCommandHandler).Assembly);
-//builder.Services.AddMediatR(typeof(CreateVacancyCommandHandler).Assembly);
-
-
 // Register your handlers
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
-
 
 builder.Services.AddTransient<IRequestHandler<RegisterAsEmployerCommand, IdentityResult>, RegisterAsEmployerCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<RegisterAsApplicantCommand, IdentityResult>, RegisterAsApplicantCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<CreateVacancyCommand, Vacancy>, CreateVacancyCommandHandler>();
-builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>, ApplyForVacancyCommandHandler>();
-builder.Services.AddTransient<IRequestHandler<GetActiveVacanciesQuery, IEnumerable<Vacancy>>, GetActiveVacanciesQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<EditVacancyCommand, Vacancy>, EditVacancyCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<DeleteVacancyCommand, bool>, DeleteVacancyCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<GetApplicantsForVacancyQuery, IEnumerable<ApplicationDetails>>, GetApplicantsForVacancyQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetVacanciesQuery, IEnumerable<Vacancy>>, GetVacanciesQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<GetActiveVacanciesQuery, IEnumerable<Vacancy>>, GetActiveVacanciesQueryHandler>();
+builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, ApplicationDetails>, ApplyForVacancyCommandHandler>();
+builder.Services.AddTransient<IRequestHandler<SearchVacanciesQuery, IEnumerable<Vacancy>>, SearchVacanciesQueryHandler>();
+
+
+
 
 
 builder.Services.AddControllers();
