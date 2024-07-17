@@ -12,5 +12,7 @@ namespace EmploymentSystem.Core.Interfaces
     {
         Task<IEnumerable<Vacancy>> GetActiveVacanciesAsync();
         Task<IEnumerable<ApplicationDetails>> GetApplicationsByVacancyIdAsync(int vacancyId);
+        Task<IEnumerable<Vacancy>> GetVacanciesAsync(string employerId);
+        Task<IEnumerable<Vacancy>> SearchVacanciesAsync(string title);
     }
 }

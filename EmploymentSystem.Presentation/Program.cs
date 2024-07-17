@@ -5,6 +5,7 @@ using EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy;
 using EmploymentSystem.Application.Commands.Vacancies.CreateVacancy;
 using EmploymentSystem.Application.Commands.Vacancies.GetAllApplicants;
 using EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies;
+using EmploymentSystem.Application.Features.Vacancies.ApplyForVacancy;
 using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using EmploymentSystem.Infrastructure.Data;
@@ -37,6 +38,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddSignInManager()
     .AddRoles<IdentityRole>();
 
+
+// Register IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
@@ -85,6 +89,9 @@ builder.Services.AddSwaggerGen(options =>
 
 
 // Register your handlers
+builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+
 builder.Services.AddTransient<IRequestHandler<RegisterAsEmployerCommand, IdentityResult>, RegisterAsEmployerCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<RegisterAsApplicantCommand, IdentityResult>, RegisterAsApplicantCommandHandler>();
 builder.Services.AddTransient<IRequestHandler<LoginUserCommand, string>, LoginUserCommandHandler>();
@@ -93,7 +100,6 @@ builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, Applicatio
 builder.Services.AddTransient<IRequestHandler<GetActiveVacanciesQuery, IEnumerable<Vacancy>>, GetActiveVacanciesQueryHandler>();
 builder.Services.AddTransient<IRequestHandler<GetApplicantsForVacancyQuery, IEnumerable<ApplicationDetails>>, GetApplicantsForVacancyQueryHandler>();
 
-builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddControllers();
 
