@@ -95,24 +95,6 @@ namespace EmploymentSystem.Presentation.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Employer")]
-        [HttpGet("GetActiveVacancies")]
-        public async Task<IActionResult> GetActiveVacancies()
-        {
-            _logger.LogInformation("Request received to fetch active vacancies");
-
-            try
-            {
-                var vacancies = await _mediator.Send(new GetActiveVacanciesQuery());
-                return Ok(vacancies);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while fetching active vacancies");
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
-        }
-
 
         [HttpGet("GetAllVacancies")]
         [Authorize(Roles = "Employer")]
