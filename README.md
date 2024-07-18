@@ -41,6 +41,7 @@ Setup Instructions
 bash
 
 git clone https://github.com/amrayman1/EmploymentSystem.git
+
 cd employment-system
 
 2. Database Setup
