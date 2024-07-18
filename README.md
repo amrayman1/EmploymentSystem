@@ -98,7 +98,3 @@ Applicant APIs
     Apply for Vacancy: POST /api/applicants/ApplyForVacancy
     Search Vacancies: GET /api/applicants/SearchVacancies?title={title}
 
-Additional Notes
-
-    Ensure to secure your application endpoints and handle authentication and authorization properly.
-    Customize the README further based on additional features, deployment instructions, or specific configurations relevant to your project.
