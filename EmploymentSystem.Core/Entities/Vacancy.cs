@@ -15,6 +15,7 @@ namespace EmploymentSystem.Core.Entities
         public string Description { get; set; }
         public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
+        public bool IsArchived { get; set; }
         public int MaxApplications { get; set; }
 
         [ForeignKey("EmployerId")]

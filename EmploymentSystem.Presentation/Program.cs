@@ -20,6 +20,7 @@ using EmploymentSystem.Core.Entities;
 using EmploymentSystem.Core.Interfaces;
 using EmploymentSystem.Infrastructure.Data;
 using EmploymentSystem.Infrastructure.Repositories;
+using EmploymentSystem.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -34,6 +35,12 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // Add other providers as needed (e.g., Debug, EventSource, etc.)
+
 
 //Starting
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
@@ -55,8 +62,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
-
-
 
 //JWT
 
@@ -109,10 +114,15 @@ builder.Services.AddTransient<IRequestHandler<ApplyForVacancyCommand, Applicatio
 builder.Services.AddTransient<IRequestHandler<SearchVacanciesQuery, IEnumerable<Vacancy>>, SearchVacanciesQueryHandler>();
 
 
+// Register background service
+builder.Services.AddHostedService<VacancyArchivingService>();
 
 
-
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

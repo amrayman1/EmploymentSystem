@@ -13,27 +13,69 @@ namespace EmploymentSystem.Presentation.Controllers
     public class ApplicantsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<ApplicantsController> _logger;
 
-        public ApplicantsController(IMediator mediator)
+        public ApplicantsController(IMediator mediator, ILogger<ApplicantsController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpPost("ApplyForVacancy")]
         [Authorize(Roles = "Applicant")]
-        public async Task<IActionResult> ApplyForVacancy(ApplyForVacancyCommand command)
+        public async Task<IActionResult> ApplyForVacancy([FromForm] ApplyForVacancyCommand command, IFormFile resume)
         {
-            var application = await _mediator.Send(command);
-            return Ok(application);
+            _logger.LogInformation("ApplyForVacancy action started.");
+
+            if (resume == null || resume.Length == 0)
+            {
+                _logger.LogWarning("No resume uploaded.");
+                return BadRequest("No resume uploaded.");
+            }
+
+            try
+            {
+                var uploadsFolder = Path.Combine("uploads", "resumes");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var filePath = Path.Combine(uploadsFolder, Guid.NewGuid() + Path.GetExtension(resume.FileName));
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await resume.CopyToAsync(stream);
+                }
+
+                command.ResumeFilePath = filePath;
+                var application = await _mediator.Send(command);
+                _logger.LogInformation("Application submitted successfully.");
+                return Ok("Application submitted successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while applying for a vacancy.");
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPost("SearchVacancies")]
+        [HttpGet("SearchVacancies")]
         [Authorize(Roles = "Applicant")]
         public async Task<IActionResult> SearchVacancies([FromBody] SearchVacanciesQuery query)
         {
-            var result = await _mediator.Send(query);
+            _logger.LogInformation("SearchVacancies action started.");
 
-            return Ok(result);
+            try
+            {
+                var result = await _mediator.Send(query);
+                _logger.LogInformation("Vacancies retrieved successfully.");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while searching for vacancies.");
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

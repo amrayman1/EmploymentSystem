@@ -11,6 +11,8 @@ namespace EmploymentSystem.Core.Entities
     {
         public int Id { get; set; }
         public DateTime ApplicationDate { get; set; }
+        public string Resume { get; set; }
+        public string CoverLetter { get; set; }
 
         [ForeignKey("VacancyId")]
         public Vacancy Vacancy { get; set; }
