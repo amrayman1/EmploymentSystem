@@ -38,7 +38,7 @@ namespace EmploymentSystem.Infrastructure.Services
                     _logger.LogError(ex, "Error occurred while archiving expired vacancies.");
                 }
 
-                await Task.Delay(TimeSpan.FromHours(24), stoppingToken); // Run daily
+                await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
             }
         }
     }

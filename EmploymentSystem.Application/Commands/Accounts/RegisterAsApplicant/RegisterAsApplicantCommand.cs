@@ -13,8 +13,6 @@ namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsApplicant
 {
     public class RegisterAsApplicantCommand : IRequest<IdentityResult>
     {
-        //public string? Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 
@@ -26,8 +24,6 @@ namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsApplicant
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        //[Required]
-        //public string Role { get; set; } // Role selection
     }
 
 

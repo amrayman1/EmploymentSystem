@@ -36,10 +36,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-
 // Configure logging
 builder.Logging.ClearProviders();
-builder.Logging.AddConsole(); // Add other providers as needed (e.g., Debug, EventSource, etc.)
+builder.Logging.AddConsole();
 
 
 //Starting
@@ -64,7 +63,6 @@ builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
 //JWT
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -94,7 +92,6 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.ApiKey
     });
 
-    //c.SwaggerDoc("v1", new OpenApiInfo { Title = "Employment System API", Version = "v1" });
 });
 
 

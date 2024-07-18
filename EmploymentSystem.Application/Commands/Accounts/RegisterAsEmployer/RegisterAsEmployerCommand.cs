@@ -13,7 +13,6 @@ namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer
 {
     public class RegisterAsEmployerCommand : IRequest<IdentityResult>
     {
-        //public string? Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -22,15 +21,11 @@ namespace EmploymentSystem.Application.Commands.Accounts.RegisterAsEmployer
         [EmailAddress]
         public string Email { get; set; }
 
-        //[Required]
-        //public string UserName { get; set; }
-
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        //[Required]
-        //public string Role { get; set; } // Role selection
+
     }
 
     

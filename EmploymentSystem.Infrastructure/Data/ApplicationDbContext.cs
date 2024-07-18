@@ -29,19 +29,19 @@ namespace EmploymentSystem.Infrastructure.Data
                 .HasMany(e => e.Vacancies)
                 .WithOne(v => v.Employer)
                 .HasForeignKey(v => v.EmployerId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Applicant>()
                 .HasMany(a => a.Applications)
                 .WithOne(ad => ad.Applicant)
                 .HasForeignKey(ad => ad.ApplicantId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Vacancy>()
                 .HasMany(v => v.Applications)
                 .WithOne(ad => ad.Vacancy)
                 .HasForeignKey(ad => ad.VacancyId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ApplicationDetails>()
                 .HasKey(ad => ad.Id);

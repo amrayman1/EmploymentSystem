@@ -41,7 +41,6 @@ namespace EmploymentSystem.Application.Features.Accounts.Login
                 return null;
             }
 
-            // Fetch the roles of the user
             var roles = await _userManager.GetRolesAsync(user);
 
             var tokenHandler = new JwtSecurityTokenHandler();
