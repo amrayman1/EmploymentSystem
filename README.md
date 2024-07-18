@@ -26,6 +26,11 @@ Technologies Used
         Entity Framework Core
         LINQ
         SQL Server
+    Principles:
+        Clean Architecture
+        CQRS
+        Mediator Pattern
+        Solid Principles
 
 Prerequisites
 
