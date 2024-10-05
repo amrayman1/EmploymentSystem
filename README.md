@@ -21,7 +21,7 @@ For Applicants:
 Technologies Used
 
     Backend:
-        ASP.NET Core 8
+        ASP.NET Core 8 Web API
         C# Programming Language
         Entity Framework Core
         LINQ
