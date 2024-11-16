@@ -1,4 +1,5 @@
 ﻿using EmploymentSystem.Application.Commands.Vacancies.ApplyForVacancy;
+using EmploymentSystem.Application.Commands.Vacancies.GetAllVacancies;
 using EmploymentSystem.Application.Features.Vacancies.SearchForVacancy;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
